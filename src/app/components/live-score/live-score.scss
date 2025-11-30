@@ -1,0 +1,88 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f0f0;
+  min-height: 100vh;
+}
+
+.header {
+  background-color: #001e28; // Culoarea specifică Flashscore
+  color: white;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  button {
+    background: #ff5454;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+}
+
+.league-section {
+  background: white;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.league-header {
+  background: #f8f8f8;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.match-row {
+  display: flex;
+  padding: 12px 10px;
+  border-bottom: 1px solid #eee;
+  align-items: center;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #fafffa;
+  }
+
+  .status {
+    width: 40px;
+    color: #ff5454; // Roșu pentru live
+    font-weight: bold;
+    font-size: 0.8rem;
+  }
+
+  .teams {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    .team {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-right: 20px;
+      
+      &.winner {
+        font-weight: bold;
+      }
+    }
+  }
+
+  .scores {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-weight: bold;
+    color: #ff5454;
+  }
+}

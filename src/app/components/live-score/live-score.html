@@ -1,0 +1,50 @@
+<div class="container">
+  <div class="header">
+    <h1>Flashscore Clone - Live</h1>
+    <button (click)="loadLiveMatches()">Reîncarcă</button>
+  </div>
+
+  @if (isLoading()) {
+    <div class="loading">Se încarcă scorurile...</div>
+  } @else {
+    @if (matches().length === 0) {
+      <div class="no-matches">Nu sunt meciuri live momentan.</div>
+    }
+
+    @for (group of groupedMatches(); track $index) {
+      <div class="league-section">
+        <div class="league-header">
+          <img [src]="group.info.flag || group.info.logo" alt="Country" width="20">
+          <span class="country">{{ group.info.country }}:</span>
+          <span class="league-name">{{ group.info.name }}</span>
+        </div>
+
+        @for (match of group.matches; track match.fixture.id) {
+          <div class="match-row">
+            <div class="status">
+              <span class="time">{{ match.fixture.status.elapsed }}'</span>
+            </div>
+            
+            <div class="teams">
+              <!-- AICI AM MODIFICAT: Folosim (.. ?? 0) pentru a trata valorile null -->
+              <div class="team home" [class.winner]="(match.goals.home ?? 0) > (match.goals.away ?? 0)">
+                <span class="name">{{ match.teams.home.name }}</span>
+                <img [src]="match.teams.home.logo" width="15" alt="Home Logo">
+              </div>
+              <div class="team away" [class.winner]="(match.goals.away ?? 0) > (match.goals.home ?? 0)">
+                <span class="name">{{ match.teams.away.name }}</span>
+                <img [src]="match.teams.away.logo" width="15" alt="Away Logo">
+              </div>
+            </div>
+
+            <div class="scores">
+              <span class="score">{{ match.goals.home ?? 0 }}</span>
+              <span class="dash">-</span>
+              <span class="score">{{ match.goals.away ?? 0 }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>
