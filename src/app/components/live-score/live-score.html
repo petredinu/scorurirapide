@@ -1,39 +1,54 @@
 <div class="container">
   <div class="header">
-    <h1>Flashscore Clone - Live</h1>
-    <button (click)="loadLiveMatches()">Reîncarcă</button>
+    <div class="brand">
+      <h1>Scoruri Rapide</h1>
+    </div>
+    
+    <!-- CONTROALE DATĂ -->
+    <div class="controls">
+        <label>Data: </label>
+        <input type="date" [ngModel]="currentDate()" (ngModelChange)="currentDate.set($event); onDateChange()" class="date-picker">
+        <button class="refresh-btn" (click)="startLiveRefresh()" title="Actualizează">↻</button>
+    </div>
   </div>
 
   @if (isLoading()) {
-    <div class="loading">Se încarcă scorurile...</div>
+    <div class="loading">Se încarcă datele...</div>
   } @else {
     @if (matches().length === 0) {
-      <div class="no-matches">Nu sunt meciuri live momentan.</div>
+      <div class="no-matches">Niciun meci găsit pentru {{ currentDate() }}.</div>
     }
 
     @for (group of groupedMatches(); track $index) {
       <div class="league-section">
         <div class="league-header">
-          <img [src]="group.info.flag || group.info.logo" alt="Country" width="20">
+          <img [src]="group.info.flag || group.info.logo" alt="Flag" width="20">
           <span class="country">{{ group.info.country }}:</span>
           <span class="league-name">{{ group.info.name }}</span>
         </div>
 
         @for (match of group.matches; track match.fixture.id) {
-          <div class="match-row">
+          <!-- CLICK PE MECI PENTRU DETALII -->
+          <div class="match-row" (click)="goToMatch(match.fixture.id)">
             <div class="status">
-              <span class="time">{{ match.fixture.status.elapsed }}'</span>
+               @if(match.fixture.status.short === 'NS' || match.fixture.status.short === 'TBD') {
+                  <span class="scheduled">{{ match.fixture.date | date:'HH:mm' }}</span>
+               } @else if (match.fixture.status.short === 'FT') {
+                  <span class="finished">Final</span>
+               } @else {
+                  <span class="live-time">{{ match.fixture.status.elapsed }}'</span>
+               }
             </div>
             
             <div class="teams">
-              <!-- AICI AM MODIFICAT: Folosim (.. ?? 0) pentru a trata valorile null -->
+              <!-- Scoruri Home/Away cu Null Check (?? 0) -->
               <div class="team home" [class.winner]="(match.goals.home ?? 0) > (match.goals.away ?? 0)">
                 <span class="name">{{ match.teams.home.name }}</span>
-                <img [src]="match.teams.home.logo" width="15" alt="Home Logo">
+                <img [src]="match.teams.home.logo" width="15" alt="Home">
               </div>
               <div class="team away" [class.winner]="(match.goals.away ?? 0) > (match.goals.home ?? 0)">
                 <span class="name">{{ match.teams.away.name }}</span>
-                <img [src]="match.teams.away.logo" width="15" alt="Away Logo">
+                <img [src]="match.teams.away.logo" width="15" alt="Away">
               </div>
             </div>
 
